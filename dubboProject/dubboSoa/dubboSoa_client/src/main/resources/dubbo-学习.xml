@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+    
+    <!-- 使用了dubbo.properties进行配置 -->
+	<!-- <dubbo:application name="consumer-of-helloworld-app" />
+	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" />   -->
+	
+	
+	<!-- 注解的方式 -->
+	<!-- <dubbo:annotation package="com.ctrl" /> -->
+	
+	<!-- 
+		启动时检查（也可以用properties或者-D）
+			check="false"（没有提供者时报错）
+			<dubbo:consumer check="false" /> 关闭所有服务的启动时检查：(没有提供者时报错)：
+			<dubbo:registry check="false" /> 关闭注册中心启动时检查：(注册订阅失败时报错)
+			启动时加载属性（默认延迟加载）
+			init="true"
+			
+		集群模式配置（Failover、Failfast、Failsafe、Failback、Forking）
+			<dubbo:service cluster="failsafe" />	provider
+			<dubbo:reference cluster="failsafe" />	consumer
+			重试次数属性
+			retries="2"
+			
+		负载均衡（Random、RoundRobin、LeastActive、ConsistentHash ）
+			<dubbo:service interface="..." loadbalance="roundrobin" />
+			<dubbo:reference interface="..." loadbalance="roundrobin" />
+			或者通过dubbo:method进行配置
+		
+		线程模型
+			<dubbo:protocol name="dubbo" dispatcher="all" threadpool="fixed" threads="100" /> provider
+			dispatcher:all、direct、message、execution、connection
+			threadpool:fixed、cached、limited
+		
+		直连提供者（多个地址用分号隔开，properties和-D都可以配置）
+			<dubbo:reference id="xxxService" interface="com.alibaba.xxx.XxxService" url="dubbo://localhost:20890" /> consumer
+	 	
+	 	只订阅
+	 		为方便开发测试。可以让服务提供者开发方，只订阅服务(开发的服务可能依赖其它服务)，而不注册正在开发的服务，通过直连测试正在开发的服务。
+	 		<dubbo:registry address="10.20.153.10:9090" register="false" />
+	 	
+	 	只注册
+	 		可以让服务提供者方，只注册服务到另一注册中心，而不从另一注册中心订阅服务。
+			<dubbo:registry id="hzRegistry" address="10.20.153.10:9090" />
+			<dubbo:registry id="qdRegistry" address="10.20.141.150:9090" subscribe="false" />
+		
+		静态服务
+			有时候希望人工管理服务提供者的上线和下线，此时需将注册中心标识为非动态管理模式。
+			<dubbo:registry address="10.20.141.150:9090" dynamic="false" />
+		
+		多协议（provider）
+			参考文档
+			1）不同服务不同协议
+			2）多协议暴露服务
+		
+		多注册中心
+			参考文档
+		
+		服务分组
+			当一个接口有多种实现时，可以用group区分。
+			<dubbo:reference id="feedbackIndexService" group="feedback" interface="com.xxx.IndexService" />
+			<dubbo:reference id="memberIndexService" group="member" interface="com.xxx.IndexService" />
+			
+			任意组引用（总是只调一个可用组的实现）
+			<dubbo:reference id="barService" interface="com.foo.BarService" group="*" />
+		
+		多版本
+			当一个接口实现，出现不兼容升级时，可以用版本号过渡，版本号不同的服务相互间不引用。
+			1)在低压力时间段，先升级一半提供者为新版本
+			2)再将所有消费者升级为新版本
+			3)然后将剩下的一半提供者升级为新版本
+			<dubbo:service interface="com.foo.BarService" version="1.0.0" />
+			<dubbo:reference id="barService" interface="com.foo.BarService" version="1.0.0" />
+			<dubbo:reference id="barService" interface="com.foo.BarService" version="*" />(不区分版本)
+	 
+	 	分组聚合（Consumer）
+	 		按组合并返回结果，比如菜单服务，接口一样，但有多种实现，用group区分，现在消费方需从每种group中调用一次返回结果，合并结果返回，这样就可以实现聚合菜单项
+			<dubbo:reference interface="com.xxx.MenuService" group="*" merger="true" />
+	 		详见文档
+	 	
+	 	结果缓存
+	 		结果缓存，用于加速热门数据的访问速度，Dubbo提供声明式缓存，以减少用户加缓存的工作量。
+	 		<dubbo:reference interface="com.foo.BarService" cache="lru" />
+	 		详见文档
+	 		
+	 	泛化引用
+	 		泛接口调用方式主要用于客户端没有API接口及模型类元的情况，参数及返回值中的所有POJO均用Map表示，通常用于框架集成，比如：实现一个通用的服务测试框架，可通过GenericService调用所有服务实现。
+	 		<dubbo:reference id="barService" interface="com.foo.BarService" generic="true" />
+	 		详见文档
+	 		
+	 	泛化实现
+	 		泛接口实现方式主要用于服务器端没有API接口及模型类元的情况，参数及返回值中的所有POJO均用Map表示，通常用于框架集成，比如：实现一个通用的远程服务Mock框架，可通过实现GenericService接口处理所有服务请求。
+	 		详见文档
+	 
+	 	回声测试
+	 		回声测试用于检测服务是否可用，回声测试按照正常请求流程执行，能够测试整个调用是否通畅，可用于监控。
+			所有服务自动实现EchoService接口，只需将任意服务引用强制转型为EchoService，即可使用。
+	 		详见文档
+	 		
+	 	上下文信息
+	 		上下文中存放的是当前调用过程中所需的环境信息。
+	 		详见文档
+	 		
+	 	隐式传参
+	 		详见文档
+	 		
+	 	异步调用
+	 		基于NIO的非阻塞实现并行调用，客户端不需要启动多线程即可完成并行调用多个远程服务，相对多线程开销较小。
+	 		详见文档
+	 
+	 	本地调用
+	 		本地调用，使用了Injvm协议，是一个伪协议，它不开启端口，不发起远程调用，只在JVM内直接关联，但执行Dubbo的Filter链。
+	 		详见文档
+	 	
+	 	参数回调
+	 		参数回调方式与调用本地callback或listener相同，只需要在Spring的配置文件中声明哪个参数是callback类型即可，Dubbo将基于长连接生成反向代理，这样就可以从服务器端调用客户端逻辑。
+	 		详见文档
+	 		
+	 	事件通知
+	 		在调用之前，调用之后，出现异常时，会触发oninvoke, onreturn, onthrow三个事件，可以配置当事件发生时，通知哪个类的哪个方法。
+	 		详见文档
+	 		
+	 	本地存根
+	 		远程服务后，客户端通常只剩下接口，而实现全在服务器端，但提供方有些时候想在客户端也执行部分逻辑，比如：做ThreadLocal缓存，提前验证参数，调用失败后伪造容错数据等等，此时就需要在API中带上Stub，客户端生成Proxy实，会把Proxy通过构造函数传给Stub，然后把Stub暴露组给用户，Stub可以决定要不要去调Proxy。
+	 		详见文档
+	 		
+	 	本地伪装
+	 		详见文档
+	 	
+	 	本地暴露
+	 		详见文档
+	 	
+	 	并发控制
+	 		限制com.foo.BarService的每个方法，服务器端并发执行（或占用线程池线程数）不能超过10个
+	 		<dubbo:service interface="com.foo.BarService" executes="10" />
+	 		详见文档
+	 		
+	 	连接控制
+	 		限制服务器端接受的连接不能超过10个：（以连接在Server上，所以配置在Provider上）
+	 		<dubbo:provider protocol="dubbo" accepts="10" />
+	 		详见文档
+	 		
+	 	延迟连接
+	 		延迟连接，用于减少长连接数，当有调用发起时，再创建长连接。
+	 		<dubbo:protocol name="dubbo" lazy="true" />
+	 		详见文档
+	 		
+	 	粘滞连接
+	 		粘滞连接用于有状态服务，尽可能让客户端总是向同一提供者发起调用，除非该提供者挂了，再连另一台。
+			<dubbo:protocol name="dubbo" sticky="true" />
+			详见文档
+			
+		路由规则
+		条件路由规则
+		脚本路由规则
+		配置规则
+			详见文档
+	 -->
+	<dubbo:reference id="demoService" interface="com.soa.dubbo.service.api.DemoService" check="false"/>
+	
+</beans>
+
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="dubbo-common" />
+        <module name="dubboDemo" />
+        <module name="dubboSoa_api" />
+        <module name="dubboSoa_client" />
+        <module name="dubboSoa_service" />
+        <module name="dubboSoa_service_server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="dubbo-common" target="1.7" />
+      <module name="dubboDemo" target="1.7" />
+      <module name="dubboProject" target="1.7" />
+      <module name="dubboSoa" target="1.7" />
+      <module name="dubboSoa_api" target="1.7" />
+      <module name="dubboSoa_client" target="1.7" />
+      <module name="dubboSoa_service" target="1.7" />
+      <module name="dubboSoa_service_server" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

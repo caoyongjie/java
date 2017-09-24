@@ -1,0 +1,7 @@
+types:用来定义访问的类型，请求与响应（参数及返回值）
+SOAP：simple object access protocol简单对象访问协议，通过xml传递消息信息
+message：通过SOAP传递消息
+portTpe：指明服务的接口名称（并且通过operation绑定相应的in和out的消息，其中in表示参数，out表示返回值）
+operation：服务的方法名
+binding：指定传递消息所使用的格式
+service：指定服务所发布的名称

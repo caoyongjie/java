@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/dubbo-common/dubbo-common.iml" filepath="$PROJECT_DIR$/dubbo-common/dubbo-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboDemo/dubboDemo.iml" filepath="$PROJECT_DIR$/dubboDemo/dubboDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboProject.iml" filepath="$PROJECT_DIR$/dubboProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboSoa/dubboSoa.iml" filepath="$PROJECT_DIR$/dubboSoa/dubboSoa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboSoa/dubboSoa_api/dubboSoa_api.iml" filepath="$PROJECT_DIR$/dubboSoa/dubboSoa_api/dubboSoa_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboSoa/dubboSoa_client/dubboSoa_client.iml" filepath="$PROJECT_DIR$/dubboSoa/dubboSoa_client/dubboSoa_client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboSoa/dubboSoa_service/dubboSoa_service.iml" filepath="$PROJECT_DIR$/dubboSoa/dubboSoa_service/dubboSoa_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dubboSoa/dubboSoa_service_server/dubboSoa_service_server.iml" filepath="$PROJECT_DIR$/dubboSoa/dubboSoa_service_server/dubboSoa_service_server.iml" />
+    </modules>
+  </component>
+</project>
